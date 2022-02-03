@@ -11,6 +11,11 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.camposCustomizados = new CamposCustomizados();
         }
 
+        public Impressao(CamposCustomizados camposCustomizados)
+        {
+            this.camposCustomizados = camposCustomizados;
+        }
+
         public CamposCustomizados camposCustomizados { get; set; }
     }
 }

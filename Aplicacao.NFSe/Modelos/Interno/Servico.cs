@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Aplicacao.NFSe.Modelos.Interno
 {
+    
     public class Servico
     {
         public Servico()
@@ -12,6 +13,26 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.valor = new Valor();
             this.retencao = new Retencao();
         }
+
+        public Servico(string codigo, string descricaoLC116, string discriminacao, string cnae,
+            string codigoTributacao, string codigoCidadeIncidencia,
+            string descricaoCidadeIncidencia,
+            Iss iss, Retencao retencao, Valor valor) : this()
+        {
+            this.codigo = codigo;
+            this.descricaoLC116 = descricaoLC116;
+            this.discriminacao = discriminacao;
+            this.cnae = cnae;
+            this.codigoTributacao = codigoTributacao;
+            this.codigoCidadeIncidencia = codigoCidadeIncidencia;
+            this.descricaoCidadeIncidencia = descricaoCidadeIncidencia;
+            this.iss = iss;
+            this.retencao = retencao;
+            this.valor = valor;
+        }
+
+
+
         public Iss iss { get; set; }
         public Valor valor { get; set; }
         public Retencao retencao { get; set; }

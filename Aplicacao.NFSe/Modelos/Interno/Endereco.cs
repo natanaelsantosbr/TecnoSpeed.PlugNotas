@@ -6,6 +6,27 @@ namespace Aplicacao.NFSe.Modelos.Interno
 {
     public class Endereco
     {
+        public Endereco()
+        {
+
+        }
+
+        public Endereco(string descricaoCidade, string cep, string tipoLogradouro, string logradouro, 
+            string tipoBairro, string codigoCidade, string complemento, string estado, string numero,
+            string bairro) : this()
+        {
+            this.descricaoCidade = descricaoCidade;
+            this.cep = cep;
+            this.tipoLogradouro = tipoLogradouro;
+            this.logradouro = logradouro;
+            this.tipoBairro = tipoBairro;
+            this.codigoCidade = codigoCidade;
+            this.complemento = complemento;
+            this.estado = estado;
+            this.numero = numero;
+            this.bairro = bairro;
+        }
+
         public string codigoPais { get; set; }
         public string descricaoPais { get; set; }
         public string descricaoCidade { get; set; }

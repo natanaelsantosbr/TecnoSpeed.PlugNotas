@@ -13,6 +13,13 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.csll = new Csll();
         }
 
+        public Retencao(Pis pis, Cofins cofins, Csll csll)
+        {
+            this.pis = pis;
+            this.cofins = cofins;
+            this.csll = csll;
+        }
+
         public Pis pis { get; set; }
         public Cofins cofins { get; set; }
         public Csll csll { get; set; }

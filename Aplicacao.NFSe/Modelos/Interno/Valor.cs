@@ -7,6 +7,22 @@ namespace Aplicacao.NFSe.Modelos.Interno
 {
     public class Valor
     {
+        public Valor()
+        {
+
+        }
+
+        public Valor(int deducoes, double baseCalculo, int servico, int descontoIncondicionado,
+            int descontoCondicionado, double liquido ) : this()
+        {
+            this.deducoes = deducoes;
+            this.baseCalculo = baseCalculo;
+            this.servico = servico;
+            this.descontoIncondicionado = descontoIncondicionado;
+            this.descontoCondicionado = descontoCondicionado;
+            this.liquido = liquido;
+        }
+
         public int deducoes { get; set; }
         public double baseCalculo { get; set; }
         public int servico { get; set; }

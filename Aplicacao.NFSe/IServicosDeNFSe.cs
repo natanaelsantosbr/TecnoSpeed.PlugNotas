@@ -11,5 +11,8 @@ namespace Aplicacao.NFSe
     {
         [Get("/nfse/{idNota}")]
         Task<ApiResponse<BuscarNFSe>> BuscarNotaAsync([Header("x-api-key")] string apiKey, string idNota);
+
+        [Post("/nfse")]
+        Task<ApiResponse<RetornoNFSe>> CadastrarAsync([Header("x-api-key")] string apiKey, List<CadastrarNFSe> modelo);
     }
 }

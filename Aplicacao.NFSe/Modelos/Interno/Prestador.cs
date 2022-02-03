@@ -4,6 +4,8 @@ using System.Text;
 
 namespace Aplicacao.NFSe.Modelos.Interno
 {
+
+    
     public class Prestador
     {
         public Prestador()
@@ -12,6 +14,28 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.config = new Config();
             this.endereco = new Endereco();
         }
+
+
+        public Prestador(string cpfCnpj, string razaoSocial, string nomeFantasia, string inscricaoMunicipal,
+            string inscricaoEstadual, bool simplesNacional, bool incentivoFiscal,
+            bool incentivadorCultural, int regimeTributario, int regimeTributarioEspecial,
+            string email, Endereco endereco, Telefone telefone) : this()
+        {
+            this.cpfCnpj = cpfCnpj;
+            this.razaoSocial = razaoSocial;
+            this.nomeFantasia = nomeFantasia;
+            this.inscricaoMunicipal = inscricaoMunicipal;
+            this.inscricaoEstadual = inscricaoEstadual;
+            this.simplesNacional = simplesNacional;
+            this.incentivoFiscal = incentivoFiscal;
+            this.incentivadorCultural = incentivadorCultural;
+            this.regimeTributario = regimeTributario;
+            this.regimeTributarioEspecial = regimeTributarioEspecial;
+            this.email = email;
+            this.endereco = endereco;
+            this.telefone = telefone;
+        }
+
         public Telefone telefone { get; set; }
         public Config config { get; set; }
         public Endereco endereco { get; set; }
