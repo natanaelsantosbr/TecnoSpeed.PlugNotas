@@ -15,32 +15,33 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
     {
         private string _url;
         private string _key;
+        private string _grupo;
 
-        public TestarNFSe(string urlPadrao, string key)
+        public TestarNFSe(string urlPadrao, string key, string grupo)
         {
             this._url = urlPadrao;
             this._key = key;
+            this._grupo = grupo;
         }
 
         public async Task Inicializar()
         {
             var servicoNFSe = RestService.For<IServicosDeNFSe>(_url);
-            var grupo = "Emitir Nota";
 
-            var notaId = await EmitirNota(servicoNFSe, grupo);
+            var notaId = await EmitirNota(servicoNFSe);
 
-            await BuscarNota(servicoNFSe, notaId, grupo);
+            await BuscarNota(servicoNFSe, notaId);
 
-            await DownloadPDF(servicoNFSe, notaId, grupo);
+            await DownloadPDF(servicoNFSe, notaId);
 
-            await DownloadXML(servicoNFSe, notaId, grupo);
+            await DownloadXML(servicoNFSe, notaId);
 
-            var cancellationProtocol = await SolicitarCancelamento(servicoNFSe, notaId, grupo);
+            var cancellationProtocol = await SolicitarCancelamento(servicoNFSe, notaId);
 
-            await ConsultarCancelamento(servicoNFSe, cancellationProtocol, grupo);
+            await ConsultarCancelamento(servicoNFSe, cancellationProtocol);
         }
 
-        private async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe, string grupo)
+        private async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe)
         {
             var enderecoPrestador = new Endereco("Maringá", "87020025", "Avenida", "Duque de Caxias",
                 "Centro", "4115200", "17 andar", "PR", "882", "Centro");
@@ -82,20 +83,20 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             var retorno = resultado.Content.documents.First().id;
 
             if (resultado != null)
-                Console.WriteLine($"{grupo} - Emitir - {retorno}");
+                Console.WriteLine($"{_grupo} - Emitir - {retorno}");
 
             return retorno;
         }
 
-        private async Task BuscarNota(IServicosDeNFSe servicoNFSe, string notaId, string grupo)
+        private async Task BuscarNota(IServicosDeNFSe servicoNFSe, string notaId)
         {
             var resultado = await servicoNFSe.BuscarNotaAsync(_key, notaId);
 
             if (resultado != null)
-                Console.WriteLine($"{grupo} - Buscar - {resultado.Content.status}");
+                Console.WriteLine($"{_grupo} - Buscar - {resultado.Content.status}");
         }
 
-        private async Task DownloadPDF(IServicosDeNFSe servicoNFSe, string notaId, string grupo)
+        private async Task DownloadPDF(IServicosDeNFSe servicoNFSe, string notaId)
         {
             var resultado = await servicoNFSe.DownloadPDF(_key, notaId);
 
@@ -106,18 +107,18 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             System.IO.File.WriteAllBytes($"pdf/{notaId}.pdf", ByteArray);
 
             if (resultado != null)
-                Console.WriteLine($"{grupo} - Download PDF - {notaId}");
+                Console.WriteLine($"{_grupo} - Download PDF - {notaId}");
         }
 
-        private async Task DownloadXML(IServicosDeNFSe servicoNFSe, string notaId, string grupo)
+        private async Task DownloadXML(IServicosDeNFSe servicoNFSe, string notaId)
         {
             var resultado = await servicoNFSe.DownloadXML(_key, notaId);
 
             if (resultado != null)
-                Console.WriteLine($"{grupo} - Download XML - {notaId}");
+                Console.WriteLine($"{_grupo} - Download XML - {notaId}");
         }
 
-        private async Task<string> SolicitarCancelamento(IServicosDeNFSe servicoNFSe, string notaId, string grupo)
+        private async Task<string> SolicitarCancelamento(IServicosDeNFSe servicoNFSe, string notaId)
         {
             Thread.Sleep(5000);
 
@@ -128,12 +129,12 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             var protocol = resultado.Content.data.protocol;
 
             if (resultado != null)
-                Console.WriteLine($"{grupo} - Solicitar Cancelamento - {protocol}");
+                Console.WriteLine($"{_grupo} - Solicitar Cancelamento - {protocol}");
 
             return protocol;
         }
 
-        private async Task ConsultarCancelamento(IServicosDeNFSe servicoNFSe, string cancellationProtocol, string grupo)
+        private async Task ConsultarCancelamento(IServicosDeNFSe servicoNFSe, string cancellationProtocol)
         {
             Thread.Sleep(5000);
 
@@ -142,7 +143,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             var resposta = resultado.Content.data.response;
 
             if (resultado != null)
-                Console.WriteLine($"{grupo} - Consultar Cancelamento - {resposta}");
+                Console.WriteLine($"{_grupo} - Consultar Cancelamento - {resposta}");
 
         }
     }

@@ -12,7 +12,7 @@ namespace Aplicacao.NFSe.CertificadosDigitais
     {
         [Multipart]
         [Post("/certificado")]
-        Task<ApiResponse<RetornoDeCadastroDeCD>> CadastrarAsync([Header("x-api-key")] string apiKey, CadastrarCD modelo);
+        Task<ApiResponse<RetornoDeCadastroDeCD>> CadastrarAsync([Header("x-api-key")] string apiKey, [AliasAs("arquivo")] StreamPart arquivo, string senha);
 
         [Get("/certificado")]
         Task<ApiResponse<List<BuscarCD>>> BuscarTodosAsync([Header("x-api-key")] string apiKey);
