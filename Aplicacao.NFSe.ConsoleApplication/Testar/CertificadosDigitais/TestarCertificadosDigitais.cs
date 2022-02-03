@@ -29,9 +29,26 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.CertificadosDigitais
 
             var id = await Upload(_servico);
 
+            await Atualizar(_servico, id);
+
+
             await BuscarPorId(_servico, id);
 
             await BuscarTodosOsCDs(_servico);
+        }
+
+        private async Task Atualizar(IServicosDeCertificadosDigitais servico, string id)
+        {
+            var file = @"C:\cds\DATAVK_SOFTWARE_E_INTERNET_EIRELI_29637776000107_1612553363140547000.pfx";
+
+            var arquivoStream = File.OpenRead(file);
+
+            StreamPart sp = new StreamPart(arquivoStream, file);
+
+            var retorno = await servico.AlterarAsync(_key, id, sp, "IU@mfA#!mO@");
+
+            if (retorno != null)
+                Console.WriteLine($"{_grupo} - atualizar - {retorno.Content.message}");
         }
 
         private async Task<string> Upload(IServicosDeCertificadosDigitais servico)

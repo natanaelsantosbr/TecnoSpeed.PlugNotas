@@ -14,12 +14,22 @@ namespace Aplicacao.NFSe.ConsoleApplication
         {
             var testarCertificadosDigitais = new TestarCertificadosDigitais(_url, _key, "cd");
             await testarCertificadosDigitais.Inicializar();
+            
+            QuebraLinha();
 
             var testarEmpresas = new TestarEmpresas(_url, _key, "empresa");
             await testarEmpresas.Inicializar();
 
+            QuebraLinha();
+
             var testarNFSe = new TestarNFSe(_url, _key, "nfse");
             await testarNFSe.Inicializar();
+        }
+
+        private static void QuebraLinha()
+        {
+            System.Console.WriteLine("");
+            System.Console.WriteLine("");
         }
     }
 }

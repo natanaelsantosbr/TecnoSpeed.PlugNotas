@@ -21,7 +21,7 @@ namespace Aplicacao.NFSe.CertificadosDigitais
         Task<ApiResponse<BuscarCD>> BuscarPorIdAsync([Header("x-api-key")] string apiKey, string idCertificado);
 
         [Multipart]
-        [Put("/certificado")]
-        Task AlterarAsync([Header("x-api-key")] string apiKey, AlterarCD modelo);
+        [Put("/certificado/{idCertificado}")]
+        Task<ApiResponse<RetornoDeCadastroDeCD>> AlterarAsync([Header("x-api-key")] string apiKey, string idCertificado, [AliasAs("arquivo")] StreamPart arquivo, string senha);
     }
 }
