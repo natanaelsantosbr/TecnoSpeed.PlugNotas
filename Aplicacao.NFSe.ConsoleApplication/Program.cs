@@ -34,6 +34,8 @@ namespace Aplicacao.NFSe.ConsoleApplication
             await BuscarNota(servicoNFSe, notaId, grupo);
 
             await DownloadPDF(servicoNFSe, notaId, grupo);
+
+            await DownloadXML(servicoNFSe, notaId, grupo);
         }       
 
         private static async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe, string grupo)
@@ -103,6 +105,14 @@ namespace Aplicacao.NFSe.ConsoleApplication
 
             if (resultado != null)
                 Console.WriteLine($"{grupo} - Download PDF - {notaId}");
+        }
+
+        private static async Task DownloadXML(IServicosDeNFSe servicoNFSe, string notaId, string grupo)
+        {
+            var resultado = await servicoNFSe.DownloadXML(_key, notaId);
+
+            if (resultado != null)
+                Console.WriteLine($"{grupo} - Download XML - {notaId}");
         }
 
         private static async Task TestarEmpresas()

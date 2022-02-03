@@ -18,5 +18,8 @@ namespace Aplicacao.NFSe
 
         [Get("/nfse/pdf/{idNota}")]
         Task<ApiResponse<HttpContent>> DownloadPDF([Header("x-api-key")] string apiKey, string idNota);
+
+        [Get("/nfse/xml/{idNota}")]
+        Task<ApiResponse<string>> DownloadXML([Header("x-api-key")] string apiKey, string idNota);
     }
 }
