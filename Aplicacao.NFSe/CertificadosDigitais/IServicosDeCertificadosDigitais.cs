@@ -1,4 +1,5 @@
 ﻿using Aplicacao.NFSe.CertificadosDigitais.Modelos;
+using Aplicacao.NFSe.CertificadosDigitais.Retornos;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Aplicacao.NFSe.CertificadosDigitais
     {
         [Multipart]
         [Post("/certificado")]
-        Task<ApiResponse<BuscarCD>> CadastrarAsync([Header("x-api-key")] string apiKey, CadastrarCD modelo);
+        Task<ApiResponse<RetornoDeCadastroDeCD>> CadastrarAsync([Header("x-api-key")] string apiKey, CadastrarCD modelo);
 
         [Get("/certificado")]
         Task<ApiResponse<List<BuscarCD>>> BuscarTodosAsync([Header("x-api-key")] string apiKey);

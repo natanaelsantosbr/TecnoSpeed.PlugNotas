@@ -1,4 +1,5 @@
 ﻿using Aplicacao.NFSe.Empresas.Modelos.Interno;
+using Aplicacao.NFSe.Modelos.Interno;
 using System;
 using System.Collections.Generic;
 using System.Text;
