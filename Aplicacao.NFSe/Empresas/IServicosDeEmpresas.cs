@@ -9,12 +9,6 @@ namespace Aplicacao.NFSe.Empresas
 {
     public interface IServicosDeEmpresas
     {
-        /// <summary>
-        /// Cadastra e vincule uma nova Empresa (emitente/prestador) a sua organização.
-        /// </summary>
-        /// <param name="apiKey"></param>
-        /// <param name="modelo"></param>
-        /// <returns></returns>
         [Post("/empresa")]
         Task CadastrarAsync([Header("x-api-key")] string apiKey, CadastrarEmpresa modelo);
 

@@ -15,7 +15,19 @@ namespace Aplicacao.NFSe.ConsoleApplication
         {
             await TestarCertificadosDigitais();
 
-            await TestarEmpresas();            
+            await TestarEmpresas();
+
+            await TestarNFSe();
+        }
+
+        private static async Task TestarNFSe()
+        {
+            var hubEmpresas = RestService.For<IServicosDeNFSe>(_url);
+
+            var resultado = await hubEmpresas.BuscarNotaAsync(_key, "5ea2194afffc86aca90aedaa");
+
+            if (resultado != null)
+                Console.WriteLine("Buscar nfse ok");
         }
 
         private static async Task TestarEmpresas()
