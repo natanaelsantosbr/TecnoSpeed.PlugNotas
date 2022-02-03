@@ -6,6 +6,7 @@ using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aplicacao.NFSe.ConsoleApplication
@@ -17,9 +18,9 @@ namespace Aplicacao.NFSe.ConsoleApplication
 
         static async Task Main(string[] args)
         {
-            await TestarCertificadosDigitais();
+            //await TestarCertificadosDigitais();
 
-            await TestarEmpresas();
+            //await TestarEmpresas();
 
             await TestarNFSe();
         }
@@ -36,6 +37,10 @@ namespace Aplicacao.NFSe.ConsoleApplication
             await DownloadPDF(servicoNFSe, notaId, grupo);
 
             await DownloadXML(servicoNFSe, notaId, grupo);
+
+            var cancellationProtocol =  await SolicitarCancelamento(servicoNFSe, notaId, grupo);
+
+            await ConsultarCancelamento(servicoNFSe, cancellationProtocol, grupo);
         }       
 
         private static async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe, string grupo)
@@ -113,6 +118,35 @@ namespace Aplicacao.NFSe.ConsoleApplication
 
             if (resultado != null)
                 Console.WriteLine($"{grupo} - Download XML - {notaId}");
+        }
+
+        private static async Task<string> SolicitarCancelamento(IServicosDeNFSe servicoNFSe, string notaId, string grupo)
+        {
+            Thread.Sleep(5000);
+
+            var tipoDeCancelamento = new TipoDeCancelamento("C099", "É necessário o body ao cancelar uma NFSe, para incluir o código de cancelamento da cidade.");
+
+            var resultado = await servicoNFSe.SolicitarCancelamentoAsync(_key, notaId, tipoDeCancelamento);
+
+            var protocol = resultado.Content.data.protocol;
+
+            if (resultado != null)
+                Console.WriteLine($"{grupo} - Solicitar Cancelamento - {protocol}");
+
+            return protocol;
+        }
+
+        private static async Task ConsultarCancelamento(IServicosDeNFSe servicoNFSe, string cancellationProtocol, string grupo)
+        {
+            Thread.Sleep(5000);
+
+            var resultado = await servicoNFSe.ConsultarCancelamentoAsync(_key, cancellationProtocol);
+
+            var resposta = resultado.Content.data.response;
+
+            if (resultado != null)
+                Console.WriteLine($"{grupo} - Consultar Cancelamento - {resposta}");
+
         }
 
         private static async Task TestarEmpresas()

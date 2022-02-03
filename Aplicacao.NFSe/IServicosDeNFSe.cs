@@ -1,4 +1,6 @@
 ﻿using Aplicacao.NFSe.Modelos;
+using Aplicacao.NFSe.Modelos.Interno;
+using Aplicacao.NFSe.Modelos.Retornos.Cancelar;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,12 @@ namespace Aplicacao.NFSe
 
         [Get("/nfse/{idNota}")]
         Task<ApiResponse<BuscarNFSe>> BuscarNotaAsync([Header("x-api-key")] string apiKey, string idNota);
+
+        [Post("/nfse/cancelar/{idNota}")]
+        Task<ApiResponse<RetornoDeSolicitacaoDeCancelamento>> SolicitarCancelamentoAsync([Header("x-api-key")] string apiKey, string idNota, TipoDeCancelamento tipoDeCancelamento);
+
+        [Get("/nfse/cancelar/status/{cancellationProtocol}")]
+        Task<ApiResponse<RetornoDeConsultarCancelamento>> ConsultarCancelamentoAsync([Header("x-api-key")] string apiKey, string cancellationProtocol);
 
         [Get("/nfse/pdf/{idNota}")]
         Task<ApiResponse<HttpContent>> DownloadPDF([Header("x-api-key")] string apiKey, string idNota);
