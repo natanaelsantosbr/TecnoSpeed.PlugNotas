@@ -29,14 +29,15 @@ namespace Aplicacao.NFSe.ConsoleApplication
             var servicoNFSe = RestService.For<IServicosDeNFSe>(_url);
             var grupo = "Emitir Nota";
 
-            var retornoIdIntegracao =  await EmitirNota(servicoNFSe, grupo);
-            await BuscarNota(servicoNFSe, retornoIdIntegracao, grupo);
-        }
+            var notaId =  await EmitirNota(servicoNFSe, grupo);
+
+            await BuscarNota(servicoNFSe, notaId, grupo);
+
+            await DownloadPDF(servicoNFSe, notaId, grupo);
+        }       
 
         private static async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe, string grupo)
-        {
-            var idIntegracao = Guid.NewGuid().ToString();
-
+        {            
             var enderecoPrestador = new Endereco("Maringá", "87020025", "Avenida", "Duque de Caxias",
                 "Centro", "4115200", "17 andar", "PR", "882", "Centro");
 
@@ -77,17 +78,31 @@ namespace Aplicacao.NFSe.ConsoleApplication
             var retorno = resultado.Content.documents.First().id;
 
             if (resultado != null)
-                Console.WriteLine($"{grupo} - Emitir nota ok - {retorno}");
+                Console.WriteLine($"{grupo} - Emitir - {retorno}");
 
             return retorno;
         }
 
-        private static async Task BuscarNota(IServicosDeNFSe servicoNFSe, string idIntegracao,  string grupo)
+        private static async Task BuscarNota(IServicosDeNFSe servicoNFSe, string notaId,  string grupo)
         {
-            var resultado = await servicoNFSe.BuscarNotaAsync(_key, "61fb4527646872f8afef3128");
+            var resultado = await servicoNFSe.BuscarNotaAsync(_key, notaId);
 
             if (resultado != null)
-                Console.WriteLine($"{grupo} - Buscar nfse ok - {resultado.Content.status}");
+                Console.WriteLine($"{grupo} - Buscar - {resultado.Content.status}");
+        }
+
+        private static async Task DownloadPDF(IServicosDeNFSe servicoNFSe, string notaId, string grupo)
+        {
+            var resultado = await servicoNFSe.DownloadPDF(_key, notaId);
+
+            byte[] ByteArray = await resultado.Content.ReadAsByteArrayAsync();
+
+            System.IO.Directory.CreateDirectory("pdf");
+
+            System.IO.File.WriteAllBytes($"pdf/{notaId}.pdf", ByteArray);
+
+            if (resultado != null)
+                Console.WriteLine($"{grupo} - Download PDF - {notaId}");
         }
 
         private static async Task TestarEmpresas()
