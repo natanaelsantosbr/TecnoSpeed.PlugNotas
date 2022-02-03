@@ -29,7 +29,6 @@ namespace Aplicacao.NFSe.ConsoleApplication
         private static void QuebraLinha()
         {
             System.Console.WriteLine("");
-            System.Console.WriteLine("");
         }
     }
 }
