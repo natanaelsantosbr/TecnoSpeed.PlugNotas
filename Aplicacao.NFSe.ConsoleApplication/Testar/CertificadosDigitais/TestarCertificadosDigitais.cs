@@ -23,7 +23,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.CertificadosDigitais
             this._grupo = grupo;
         }
 
-        public async Task Inicializar()
+        public async Task<string> Inicializar()
         {
             var _servico = RestService.For<IServicosDeCertificadosDigitais>(_url);
 
@@ -35,6 +35,8 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.CertificadosDigitais
             await BuscarPorId(_servico, id);
 
             await BuscarTodosOsCDs(_servico);
+
+            return id;
         }
 
         private async Task Atualizar(IServicosDeCertificadosDigitais servico, string id)

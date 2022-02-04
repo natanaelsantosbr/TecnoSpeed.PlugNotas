@@ -16,6 +16,27 @@ namespace Aplicacao.NFSe.Empresas.Modelos
             this.nfe = new Nfe();
         }
 
+        public CadastrarEmpresa(string cpfCnpj, string inscricaoMunicipal, string inscricaoEstadual, string razaoSocial, string nomeFantasia,
+            string certificado, bool simplesNacional, int regimeTributario, bool incentivoFiscal, bool incentivadorCultural,
+            int regimeTributarioEspecial, Endereco endereco, Telefone telefone, string email, Nfse nfse) : this()
+        {
+            this.cpfCnpj = cpfCnpj;
+            this.inscricaoMunicipal = inscricaoMunicipal;
+            this.inscricaoEstadual = inscricaoEstadual;
+            this.razaoSocial = razaoSocial;
+            this.nomeFantasia = nomeFantasia;
+            this.certificado = certificado;
+            this.simplesNacional = simplesNacional;
+            this.regimeTributario = regimeTributario;
+            this.incentivoFiscal = incentivoFiscal;
+            this.incentivadorCultural = incentivadorCultural;
+            this.regimeTributarioEspecial = regimeTributarioEspecial;
+            this.endereco = endereco;
+            this.telefone = telefone;
+            this.email = email;
+            this.nfse = nfse;
+        }
+
         public string cpfCnpj { get; set; }
         public string inscricaoMunicipal { get; set; }
         public string inscricaoEstadual { get; set; }

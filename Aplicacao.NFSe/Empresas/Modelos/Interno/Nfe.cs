@@ -8,10 +8,10 @@ namespace Aplicacao.NFSe.Empresas.Modelos.Interno
     {
         public Nfe()
         {
-            this.config = new Config();
+            this.config = new ConfigEmpresa();
         }
         public bool ativo { get; set; }
         public int tipoContrato { get; set; }
-        public Config config { get; set; }
+        public ConfigEmpresa config { get; set; }
     }
 }

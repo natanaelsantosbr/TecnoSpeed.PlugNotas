@@ -12,7 +12,7 @@ namespace Aplicacao.NFSe.Modelos.Interno
 
         }
 
-        public Telefone(string ddd, string numero)
+        public Telefone(string ddd, string numero) : this()
         {
             this.ddd = ddd;
             this.numero = numero;

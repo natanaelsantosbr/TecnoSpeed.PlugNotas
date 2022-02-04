@@ -13,12 +13,12 @@ namespace Aplicacao.NFSe.ConsoleApplication
         static async Task Main(string[] args)
         {
             var testarCertificadosDigitais = new TestarCertificadosDigitais(_url, _key, "cd");
-            await testarCertificadosDigitais.Inicializar();
+            var idCertificado =  await testarCertificadosDigitais.Inicializar();
             
             QuebraLinha();
 
             var testarEmpresas = new TestarEmpresas(_url, _key, "empresa");
-            await testarEmpresas.Inicializar();
+            await testarEmpresas.Inicializar(idCertificado);
 
             QuebraLinha();
 

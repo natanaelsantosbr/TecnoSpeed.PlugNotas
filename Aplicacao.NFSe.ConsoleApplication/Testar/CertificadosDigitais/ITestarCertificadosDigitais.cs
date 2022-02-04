@@ -7,6 +7,6 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.CertificadosDigitais
 {
     public interface ITestarCertificadosDigitais
     {
-        Task Inicializar();
+        Task<string> Inicializar();
     }
 }

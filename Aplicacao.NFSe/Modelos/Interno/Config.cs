@@ -13,6 +13,7 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.logotipo = new Logotipo();
             this.integracoes = new List<object>();
         }
+
         public Rps rps { get; set; }
         public Email email { get; set; }
         public Logotipo logotipo { get; set; }
