@@ -15,8 +15,9 @@ namespace Aplicacao.NFSe.Modelos
             this.impressao = new Impressao();
         }
 
-        public CadastrarNFSe(Prestador prestador, Tomador tomador, Servico servico, Impressao impressao, bool enviarEmail) : this()
-        {            
+        public CadastrarNFSe(string idIntegracao, Prestador prestador, Tomador tomador, Servico servico, Impressao impressao, bool enviarEmail) : this()
+        {
+            this.IdIntegracao = idIntegracao;
             this.prestador = prestador;
             this.tomador = tomador;
             this.servico = servico;
@@ -24,6 +25,7 @@ namespace Aplicacao.NFSe.Modelos
             this.enviarEmail = enviarEmail;
         }
 
+        public string IdIntegracao { get; set; }
         public Prestador prestador { get; set; }
         public Tomador tomador { get; set; }
         public Servico servico { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aplicacao.NFSe.Modelos.Interno;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,10 +12,10 @@ namespace Aplicacao.NFSe.Empresas.Modelos.Interno
             this.config = new ConfigEmpresa();
         }
 
-        public Nfse(bool ativo, int tipoContrato, ConfigEmpresa config) : this()
+        public Nfse(Ativar ativar, TipoContrato tipoContrato, ConfigEmpresa config) : this()
         {
-            this.ativo = ativo;
-            this.tipoContrato = tipoContrato;
+            this.ativo = ativar == Ativar.Sim ? true : false;
+            this.tipoContrato = (int)tipoContrato;
             this.config = config;
         }
 

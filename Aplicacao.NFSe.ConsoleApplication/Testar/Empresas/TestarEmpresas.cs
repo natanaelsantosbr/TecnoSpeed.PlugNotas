@@ -30,7 +30,9 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
             var servico = RestService.For<IServicosDeEmpresas>(_url);
 
-            var id =  await CadastrarEmpresa(servico);
+            //var id =  await CadastrarEmpresa(servico);
+
+            var id = "28506113000182";
 
             await AlterarEmpresa(servico, id);
 
@@ -74,9 +76,9 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
             var email = new Email(true);
 
-            var config = new ConfigEmpresa(true, rps, email);
+            var config = new ConfigEmpresa(TipoDeAmbiente.Homologacao, rps, email);
 
-            var nfse = new Nfse(true, 0, config);
+            var nfse = new Nfse(Ativar.Sim, 0, config);
 
             var empresa = new CadastrarEmpresa("28506113000182", "07.824.541/001-15", "0782454100115", "DF IMOVEIS.COM S/A",
                 "DFIMOVEIS.COM", _idCertificadoDigital, SimplesNacional.Nao, RegimeTributario.NormalPresumindo, IncentivoFiscal.Nao,

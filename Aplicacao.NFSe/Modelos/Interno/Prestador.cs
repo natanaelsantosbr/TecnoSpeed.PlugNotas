@@ -16,7 +16,7 @@ namespace Aplicacao.NFSe.Modelos.Interno
         }
 
 
-        public Prestador(string cpfCnpj, string razaoSocial, string nomeFantasia, string inscricaoMunicipal,
+        public Prestador(string cpfCnpj,  string razaoSocial, string nomeFantasia, string inscricaoMunicipal,
             string inscricaoEstadual, bool simplesNacional, bool incentivoFiscal,
             bool incentivadorCultural, int regimeTributario, int regimeTributarioEspecial,
             string email, Endereco endereco, Telefone telefone) : this()
@@ -42,6 +42,7 @@ namespace Aplicacao.NFSe.Modelos.Interno
         public bool incentivadorCultural { get; set; }
         public bool incentivoFiscal { get; set; }
         public string cpfCnpj { get; set; }
+        public string codigoEstrangeiro { get; set; }
         public string inscricaoEstadual { get; set; }
         public string inscricaoMunicipal { get; set; }
         public string razaoSocial { get; set; }

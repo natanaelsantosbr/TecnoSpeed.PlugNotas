@@ -12,9 +12,9 @@ namespace Aplicacao.NFSe.Empresas.Modelos.Interno
 
         }
 
-        public ConfigEmpresa(bool producao, Rps rps, Email email)
+        public ConfigEmpresa(TipoDeAmbiente producao, Rps rps, Email email)
         {
-            this.producao = producao;
+            this.producao = producao == TipoDeAmbiente.Producao ? true : false;
             this.rps = rps;
             this.prefeitura = prefeitura;
             this.email = email;

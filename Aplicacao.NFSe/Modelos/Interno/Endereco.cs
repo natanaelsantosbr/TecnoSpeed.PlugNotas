@@ -14,7 +14,22 @@ namespace Aplicacao.NFSe.Modelos.Interno
         public Endereco(string descricaoCidade, string cep, TipoLogradouro tipoLogradouro, string logradouro,
             TipoBairro tipoBairro, string codigoCidade, string complemento, Estado estado, string numero,
             string bairro) : this()
-        {           
+        {
+            if (string.IsNullOrEmpty(bairro))
+                throw new Exception("Bairro obrigatorio");
+
+            if (string.IsNullOrEmpty(cep))
+                throw new Exception("Cep obrigatorio");
+
+            if (string.IsNullOrEmpty(codigoCidade))
+                throw new Exception("Codigo da cidade obrigatorio");
+
+            if (string.IsNullOrEmpty(logradouro))
+                throw new Exception("Logradouro obrigatorio");
+
+            if (string.IsNullOrEmpty(numero))
+                throw new Exception("Numero obrigatorio");
+
 
             this.descricaoCidade = descricaoCidade;
             this.cep = cep;

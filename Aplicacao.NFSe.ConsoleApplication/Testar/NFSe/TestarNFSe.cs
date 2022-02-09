@@ -43,6 +43,8 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
         private async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe)
         {
+            var idDeIntegracao = Guid.NewGuid().ToString();
+
             var enderecoPrestador = new Endereco("Maringá", "87020025", TipoLogradouro.Avenida, "Duque de Caxias",
                 TipoBairro.Centro, "4115200", "17 andar", Estado.PR, "882", "Centro"); ;
 
@@ -74,7 +76,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
             var lista = new List<CadastrarNFSe>();
 
-            var novaNota = new CadastrarNFSe(prestador, tomador, servico, impressao, true);
+            var novaNota = new CadastrarNFSe(idDeIntegracao, prestador, tomador, servico, impressao, true);
 
             lista.Add(novaNota);
 
