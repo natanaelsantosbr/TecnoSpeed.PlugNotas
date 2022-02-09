@@ -14,7 +14,7 @@ namespace Aplicacao.NFSe.Empresas
         Task<ApiResponse<RetornoCadastroDeEmpresa>> CadastrarAsync([Header("x-api-key")] string apiKey, CadastrarEmpresa modelo);
 
         [Patch("/empresa/{cnpj}")]
-        Task<ApiResponse<string>> AlterarAsync([Header("x-api-key")] string apiKey, string cnpj, AlterarEmpresa modelo);
+        Task<ApiResponse<string>> AlterarAsync([Header("x-api-key")] string apiKey, string cnpj, CadastrarEmpresa modelo);
 
         [Get("/empresa")]
         Task<string> BuscarTodosAsync([Header("x-api-key")] string apiKey);

@@ -17,20 +17,32 @@ namespace Aplicacao.NFSe.Empresas.Modelos
         }
 
         public CadastrarEmpresa(string cpfCnpj, string inscricaoMunicipal, string inscricaoEstadual, string razaoSocial, string nomeFantasia,
-            string certificado, bool simplesNacional, int regimeTributario, bool incentivoFiscal, bool incentivadorCultural,
-            int regimeTributarioEspecial, Endereco endereco, Telefone telefone, string email, Nfse nfse) : this()
+            string certificado, SimplesNacional simplesNacional, RegimeTributario regimeTributario, IncentivoFiscal incentivoFiscal,
+            IncentivadorCultural incentivadorCultural,
+            RegimeTributarioEspecial regimeTributarioEspecial, Endereco endereco, Telefone telefone, string email, Nfse nfse) : this()
         {
+            if (string.IsNullOrEmpty(cpfCnpj))
+                throw new Exception("CNPJ obrigatório");
+
+            if (string.IsNullOrEmpty(inscricaoMunicipal))
+                throw new Exception("Inscricação Municipal obrigatório");
+
+            if (string.IsNullOrEmpty(inscricaoEstadual))
+                throw new Exception("Inscricação Estadual obrigatório");
+
+
             this.cpfCnpj = cpfCnpj;
             this.inscricaoMunicipal = inscricaoMunicipal;
             this.inscricaoEstadual = inscricaoEstadual;
             this.razaoSocial = razaoSocial;
             this.nomeFantasia = nomeFantasia;
             this.certificado = certificado;
-            this.simplesNacional = simplesNacional;
-            this.regimeTributario = regimeTributario;
-            this.incentivoFiscal = incentivoFiscal;
-            this.incentivadorCultural = incentivadorCultural;
-            this.regimeTributarioEspecial = regimeTributarioEspecial;
+
+            this.simplesNacional = simplesNacional == SimplesNacional.Sim ? true : false;
+            this.regimeTributario = (int)regimeTributario;
+            this.incentivoFiscal = incentivoFiscal == IncentivoFiscal.Sim ? true : false;
+            this.incentivadorCultural = incentivadorCultural == IncentivadorCultural.Sim ? true : false;
+            this.regimeTributarioEspecial = (int)regimeTributarioEspecial;
             this.endereco = endereco;
             this.telefone = telefone;
             this.email = email;

@@ -43,8 +43,8 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
         private async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe)
         {
-            var enderecoPrestador = new Endereco("Maringá", "87020025", "Avenida", "Duque de Caxias",
-                "Centro", "4115200", "17 andar", "PR", "882", "Centro");
+            var enderecoPrestador = new Endereco("Maringá", "87020025", TipoLogradouro.Avenida, "Duque de Caxias",
+                TipoBairro.Centro, "4115200", "17 andar", Estado.PR, "882", "Centro"); ;
 
             var telefoneDoPrestador = new Telefone("44", "43214321");
 
@@ -52,8 +52,8 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
                 "12345", "9044016688", false, false, false, 0, 0, "exemplo@erphub.com.br", enderecoPrestador,
                 telefoneDoPrestador);
 
-            var enderecoDoTomador = new Endereco("Maringa", "87020100", "Rua", "Barao do rio branco", "Centro",
-                "4115200", "sala 01", "PR", "1001", "Centro");
+            var enderecoDoTomador = new Endereco("Maringa", "87020100", TipoLogradouro.Rua, "Barao do rio branco", TipoBairro.Centro,
+                "4115200", "sala 01", Estado.PR, "1001", "Centro");
 
             var tomador = new Tomador("99999999999999", "Empresa de Teste LTDA", "Empresa de Teste",
                 "8214100099", "string", "exemplo@erphub.com.br", enderecoDoTomador, telefoneDoPrestador);

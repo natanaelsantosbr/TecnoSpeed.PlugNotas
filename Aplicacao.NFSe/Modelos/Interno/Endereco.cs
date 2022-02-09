@@ -11,18 +11,19 @@ namespace Aplicacao.NFSe.Modelos.Interno
 
         }
 
-        public Endereco(string descricaoCidade, string cep, string tipoLogradouro, string logradouro, 
-            string tipoBairro, string codigoCidade, string complemento, string estado, string numero,
+        public Endereco(string descricaoCidade, string cep, TipoLogradouro tipoLogradouro, string logradouro,
+            TipoBairro tipoBairro, string codigoCidade, string complemento, Estado estado, string numero,
             string bairro) : this()
-        {
+        {           
+
             this.descricaoCidade = descricaoCidade;
             this.cep = cep;
-            this.tipoLogradouro = tipoLogradouro;
+            this.tipoLogradouro = tipoLogradouro.ToString();
             this.logradouro = logradouro;
-            this.tipoBairro = tipoBairro;
+            this.tipoBairro = tipoBairro.ToString();
             this.codigoCidade = codigoCidade;
             this.complemento = complemento;
-            this.estado = estado;
+            this.estado = estado.ToString();
             this.numero = numero;
             this.bairro = bairro;
         }

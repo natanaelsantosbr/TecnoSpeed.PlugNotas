@@ -39,23 +39,9 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
         private async Task AlterarEmpresa(IServicosDeEmpresas servico, string id)
         {
-            var endereco = new Endereco("Maringá", "87020-025", "Avenida", "Duque de Caxias",
-                "Zona", "4115200", "17 andar", "PR", "882", "Zona 01");
+            CadastrarEmpresa empresa = this.CriarEmpresa();
 
-            var telefone = new Telefone("44", "30379500");
-
-            var rps = new Aplicacao.NFSe.Empresas.Modelos.Interno.Rps("1", 1, 1);
-
-            var prefeitura = new Prefeitura("teste", "teste123");
-
-            var email = new Email(true);
-
-            var config = new ConfigEmpresa(true, rps, prefeitura, email);
-
-            var nfse = new Nfse(true, 0, config);
-
-            var empresa = new AlterarEmpresa("95383897000196", "8214100099", "1234567850", "Empresa do Natanael",
-                "Empresa de Teste", _idCertificadoDigital, true, 1, true, true, 5, endereco, telefone, "empresa@natanael.com.br", nfse);
+            empresa.nomeFantasia = "Empresa MMMMM";
 
             var resultado = await servico.AlterarAsync(_key, id, empresa);
 
@@ -65,23 +51,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
         private async Task<string> CadastrarEmpresa(IServicosDeEmpresas servico)
         {
-            var endereco = new Endereco("Maringá", "87020-025", "Avenida", "Duque de Caxias",
-                "Zona", "4115200", "17 andar", "PR", "882", "Zona 01");
-
-            var telefone = new Telefone("44", "30379500");
-
-            var rps = new Aplicacao.NFSe.Empresas.Modelos.Interno.Rps("1", 1, 1);
-
-            var prefeitura = new Prefeitura("teste", "teste123");
-
-            var email = new Email(true);
-
-            var config = new ConfigEmpresa(true, rps, prefeitura, email);
-
-            var nfse = new Nfse(true, 0, config);
-
-            var empresa = new CadastrarEmpresa("95383897000196", "8214100099", "1234567850", "Empresa de Teste LTDA",
-                "Empresa de Teste", _idCertificadoDigital, true, 1, true, true, 5, endereco, telefone, "empresa@plugnotas.com.br", nfse);
+            CadastrarEmpresa empresa = CriarEmpresa();
 
             var resultado = await servico.CadastrarAsync(_key, empresa);
 
@@ -91,6 +61,27 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
                 Console.WriteLine($"{_grupo} - Cadastrar - {id}");
 
             return id;
+        }
+
+        private CadastrarEmpresa CriarEmpresa()
+        {
+            var endereco = new Endereco("BRASILIA", "70070120", TipoLogradouro.Avenida, "Q SBS QUADRA 2",
+                            TipoBairro.Setor, "5300108", "BLOCO E SALA 1504 PARTE 1", Estado.DF, "S/N", "ASA SUL");
+
+            var telefone = new Telefone("61", "992394399");
+
+            var rps = new Aplicacao.NFSe.Empresas.Modelos.Interno.Rps("1", 1, 1);
+
+            var email = new Email(true);
+
+            var config = new ConfigEmpresa(true, rps, email);
+
+            var nfse = new Nfse(true, 0, config);
+
+            var empresa = new CadastrarEmpresa("28506113000182", "07.824.541/001-15", "0782454100115", "DF IMOVEIS.COM S/A",
+                "DFIMOVEIS.COM", _idCertificadoDigital, SimplesNacional.Nao, RegimeTributario.NormalPresumindo, IncentivoFiscal.Nao,
+                 IncentivadorCultural.Nao, RegimeTributarioEspecial.SemRegimeTributarioEspecial, endereco, telefone, "contato@dfimoveis.com.br", nfse);
+            return empresa;
         }
 
         private async Task BuscarTodosOsCDs(IServicosDeEmpresas servicoEmpresas, string cnpj)
