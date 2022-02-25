@@ -1,6 +1,8 @@
 ﻿using Aplicacao.NFSe.Modelos;
 using Aplicacao.NFSe.Modelos.Interno;
 using Aplicacao.NFSe.Modelos.Retornos.Cancelar;
+using Aplicacao.NFSe.Modelos.Tomadores;
+using Aplicacao.NFSe.Modelos.Tomadores.Retornos;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -25,9 +27,23 @@ namespace Aplicacao.NFSe
         Task<ApiResponse<RetornoDeConsultarCancelamento>> ConsultarCancelamentoAsync([Header("x-api-key")] string apiKey, string cancellationProtocol);
 
         [Get("/nfse/pdf/{idNota}")]
-        Task<ApiResponse<HttpContent>> DownloadPDF([Header("x-api-key")] string apiKey, string idNota);
+        Task<ApiResponse<HttpContent>> DownloadPDFAsync([Header("x-api-key")] string apiKey, string idNota);
 
         [Get("/nfse/xml/{idNota}")]
-        Task<ApiResponse<string>> DownloadXML([Header("x-api-key")] string apiKey, string idNota);
+        Task<ApiResponse<string>> DownloadXMLAsync([Header("x-api-key")] string apiKey, string idNota);
+
+        [Post("/nfse/tomador")]
+        Task<ApiResponse<RetornoDeCadastroDeTomador>> CadastrarTomadorAsync([Header("x-api-key")] string apiKey, CadastrarTomador modelo);
+
+        [Patch("/nfse/tomador/{cnpj}")]
+        Task<ApiResponse<string>> AlterarTomadorAsync([Header("x-api-key")] string apiKey, string cnpj, AlterarTomador modelo);
+
+        [Get("/nfse/tomador/{cnpj}")]
+        Task<ApiResponse<BuscarTomador>> BuscarTomadorAsync([Header("x-api-key")] string apiKey, string cnpj);
+
+        [Get("/nfse/cidades")]
+        Task<ApiResponse<CidadeIBGE>> ConsultarCidadesAsync([Header("x-api-key")] string apiKey);
+
+
     }
 }

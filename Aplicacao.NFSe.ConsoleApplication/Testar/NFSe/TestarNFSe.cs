@@ -1,6 +1,9 @@
-﻿using Aplicacao.NFSe.Empresas.Modelos.Interno;
+﻿using Aplicacao.NFSe.Ceps;
+using Aplicacao.NFSe.CNPJs;
+using Aplicacao.NFSe.Empresas.Modelos.Interno;
 using Aplicacao.NFSe.Modelos;
 using Aplicacao.NFSe.Modelos.Interno;
+using Aplicacao.NFSe.Modelos.Tomadores;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -26,19 +29,55 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
         public async Task Inicializar()
         {
-            var servicoNFSe = RestService.For<IServicosDeNFSe>(_url);
+            var servico = RestService.For<IServicosDeNFSe>(_url);
+            var servicoDeBuscaEmpresa = RestService.For<IServicosDeCNPJs>(_url);
+            var servicoDeCeps = RestService.For<IServicoDeCeps>(_url);
 
-            var notaId = await EmitirNota(servicoNFSe);
+            var cnpj = "08187168000160";
 
-            await BuscarNota(servicoNFSe, notaId);
+            await BuscarTomador(servico, cnpj);
 
-            await DownloadPDF(servicoNFSe, notaId);
+            await CadastrarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, cnpj);
 
-            await DownloadXML(servicoNFSe, notaId);
+            var notaId = await EmitirNota(servico);
 
-            var cancellationProtocol = await SolicitarCancelamento(servicoNFSe, notaId);
+            await BuscarNota(servico, notaId);
 
-            await ConsultarCancelamento(servicoNFSe, cancellationProtocol);
+            await DownloadPDF(servico, notaId);
+
+            await DownloadXML(servico, notaId);
+
+            var cancellationProtocol = await SolicitarCancelamento(servico, notaId);
+
+            await ConsultarCancelamento(servico, cancellationProtocol);
+        }
+
+        private async Task BuscarTomador(IServicosDeNFSe servico, string cnpj)
+        {
+            var tomador = await servico.BuscarTomadorAsync(_key, cnpj);
+
+            if (tomador != null)
+                Console.WriteLine($"{_grupo} - Buscar Tomador - {tomador.Content?.cpfCnpj}");
+
+        }
+
+        private async Task CadastrarTomador(IServicosDeNFSe servico, IServicosDeCNPJs servicoDeBuscaEmpresa, IServicoDeCeps servicoDeCeps, string cnpj)
+        {
+            var retorno = await servicoDeBuscaEmpresa.ConsultarCnpjAsync(_key, cnpj);
+            var empresa = retorno.Content;
+
+            string cep = empresa.endereco.cep;
+
+            var retornoCep = await servicoDeCeps.BuscarCepAsync(_key, cep);
+            var endereco = retornoCep.Content;
+
+            var tomador = new CadastrarTomador(empresa.cpf_cnpj, empresa.razao_social,
+                new Endereco(endereco.bairro, endereco.cep, endereco.ibge, Estado.DF, endereco.logradouro, endereco.complemento, TipoLogradouro.Rua));
+
+            var resultado = await servico.CadastrarTomadorAsync(_key, tomador);
+
+            if (resultado != null)
+                Console.WriteLine($"{_grupo} - Cadastrar Tomador - {resultado.Content.data.cnpj}");
         }
 
         private async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe)
@@ -100,7 +139,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
         private async Task DownloadPDF(IServicosDeNFSe servicoNFSe, string notaId)
         {
-            var resultado = await servicoNFSe.DownloadPDF(_key, notaId);
+            var resultado = await servicoNFSe.DownloadPDFAsync(_key, notaId);
 
             byte[] ByteArray = await resultado.Content.ReadAsByteArrayAsync();
 
@@ -114,7 +153,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
         private async Task DownloadXML(IServicosDeNFSe servicoNFSe, string notaId)
         {
-            var resultado = await servicoNFSe.DownloadXML(_key, notaId);
+            var resultado = await servicoNFSe.DownloadXMLAsync(_key, notaId);
 
             if (resultado != null)
                 Console.WriteLine($"{_grupo} - Download XML - {notaId}");

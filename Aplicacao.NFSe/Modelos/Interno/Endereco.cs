@@ -11,6 +11,18 @@ namespace Aplicacao.NFSe.Modelos.Interno
 
         }
 
+        public Endereco(string bairro, string cep, string codigoCidade, Estado estado, 
+            string logradouro, string numero, TipoLogradouro tipoLogradouro): this()
+        {
+            this.bairro = bairro;
+            this.cep = cep;
+            this.codigoCidade = codigoCidade;
+            this.estado = estado.ToString();
+            this.logradouro = logradouro;
+            this.numero = numero;
+            this.tipoLogradouro = tipoLogradouro.ToString();
+        }
+
         public Endereco(string descricaoCidade, string cep, TipoLogradouro tipoLogradouro, string logradouro,
             TipoBairro tipoBairro, string codigoCidade, string complemento, Estado estado, string numero,
             string bairro) : this()
