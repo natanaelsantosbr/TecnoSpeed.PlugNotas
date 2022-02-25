@@ -31,7 +31,6 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.CertificadosDigitais
 
             await Atualizar(_servico, id);
 
-
             await BuscarPorId(_servico, id);
 
             await BuscarTodosOsCDs(_servico);
