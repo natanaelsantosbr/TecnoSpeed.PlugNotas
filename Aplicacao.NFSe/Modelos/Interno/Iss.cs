@@ -11,6 +11,13 @@ namespace Aplicacao.NFSe.Modelos.Interno
 
         }
 
+        public Iss(TipoTributacao tipoTributacao, Exibilidade exibilidade, int aliquota) : this()
+        {
+            this.tipoTributacao = (int)tipoTributacao;
+            this.exigibilidade = (int)exibilidade;
+            this.aliquota = aliquota;
+        }
+
         public Iss(int exigibilidade, bool retido, int aliquota, 
             int aliquotaRetido, int tipoTributacao) : this()
         {

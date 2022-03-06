@@ -5,11 +5,21 @@ using System.Text;
 namespace Aplicacao.NFSe.Modelos.Interno
 {    
     public class Tomador
-    {
+    {        
+
         public Tomador()
         {
             this.telefone = new Telefone();
             this.endereco = new Endereco();
+        }
+
+        public Tomador(string cpfCnpj, string razaoSocial, string inscricaoMunicipal, string email, Endereco endereco) : this()
+        {
+            this.cpfCnpj = cpfCnpj;
+            this.razaoSocial = razaoSocial;
+            this.inscricaoMunicipal = inscricaoMunicipal;   
+            this.email = email;
+            this.endereco = endereco;
         }
 
         public Tomador(string cpfCnpj, string razaoSocial, string nomeFantasia, string inscricaoMunicipal,

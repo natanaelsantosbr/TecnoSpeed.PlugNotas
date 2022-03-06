@@ -14,6 +14,17 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.retencao = new Retencao();
         }
 
+        public Servico(string codigo, string codigoTributacao, string discriminacao,
+            string cnae, Iss iss, Valor valor) : this()
+        {
+            this.codigo = codigo;
+            this.codigoTributacao = codigoTributacao;
+            this.discriminacao = discriminacao;
+            this.cnae = cnae;
+            this.iss = iss;
+            this.valor = valor;
+        }
+
         public Servico(string codigo, string descricaoLC116, string discriminacao, string cnae,
             string codigoTributacao, string codigoCidadeIncidencia,
             string descricaoCidadeIncidencia,
@@ -30,8 +41,6 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.retencao = retencao;
             this.valor = valor;
         }
-
-
 
         public Iss iss { get; set; }
         public Valor valor { get; set; }

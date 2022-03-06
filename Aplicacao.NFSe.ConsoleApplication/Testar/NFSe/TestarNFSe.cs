@@ -35,11 +35,9 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
             var cnpj = "08187168000160";
 
-            await BuscarTomador(servico, cnpj);
+            await BuscarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, cnpj);
 
-            await CadastrarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, cnpj);
-
-            var notaId = await EmitirNota(servico);
+            var notaId = await EmitirNotaV2(servico);
 
             await BuscarNota(servico, notaId);
 
@@ -52,13 +50,21 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             await ConsultarCancelamento(servico, cancellationProtocol);
         }
 
-        private async Task BuscarTomador(IServicosDeNFSe servico, string cnpj)
+        private async Task BuscarTomador(IServicosDeNFSe servico,
+            IServicosDeCNPJs servicosDeCNPJs,
+            IServicoDeCeps servicoDeCeps, string cnpj)
         {
             var tomador = await servico.BuscarTomadorAsync(_key, cnpj);
 
-            if (tomador != null)
-                Console.WriteLine($"{_grupo} - Buscar Tomador - {tomador.Content?.cpfCnpj}");
-
+            if (tomador.Content != null)
+            {
+                if (tomador != null)
+                    Console.WriteLine($"{_grupo} - Buscar Tomador - {tomador.Content?.cpfCnpj}");
+            }
+            else
+            {
+                await CadastrarTomador(servico, servicosDeCNPJs, servicoDeCeps, cnpj);
+            }
         }
 
         private async Task CadastrarTomador(IServicosDeNFSe servico, IServicosDeCNPJs servicoDeBuscaEmpresa, IServicoDeCeps servicoDeCeps, string cnpj)
@@ -78,6 +84,49 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
             if (resultado != null)
                 Console.WriteLine($"{_grupo} - Cadastrar Tomador - {resultado.Content.data.cnpj}");
+        }
+
+        private async Task<string> EmitirNotaV2(IServicosDeNFSe servico)
+        {
+            var idDeIntegracao = Guid.NewGuid().ToString();
+
+            string cnpjPrestador = "28506113000182";
+
+            var prestador = new Prestador(cnpjPrestador);
+
+            string cnpjTomador = "31089572000112";
+
+            var tomador = new Tomador(cnpjTomador, "ABDALA IMOVEIS SOLUCOES IMOBILIARIAS LTDA",
+                "0756872400107", "teste@dfimoveis.com.br",
+                new Endereco("ASA NORTE", "70.701-000", "123456", Estado.DF,
+                "Q SHN QUADRA 1 CONJUNTO A BL F SALAS 303 E 304 PARTE A", "S/N",
+                TipoLogradouro.Rua));
+
+            var servicos = new List<Servico>();
+
+            var servico1 = new Servico("17.25", "17.25", "Plano de 10 imóveis", "6319400",
+                new Iss(TipoTributacao.TributavelForaDoMunicipio, Exibilidade.Exigivel,
+                5), new Valor(2.50));
+
+            var servico2 = new Servico("17.25", "17.25", "Destaque", "6319400",
+                new Iss(TipoTributacao.TributavelForaDoMunicipio, Exibilidade.Exigivel,
+                5), new Valor(3.75));
+
+            servicos.Add(servico1);
+            servicos.Add(servico2);
+
+            var lista = new List<CadastrarNFSe>();
+
+            var cadastrarNFSE = new CadastrarNFSe(idDeIntegracao, prestador, tomador, servicos);
+
+            lista.Add(cadastrarNFSE);
+
+            var resultado = await servico.CadastrarAsync(_key, lista);
+
+            if (resultado != null)
+                Console.WriteLine($"{_grupo} - Emitir - {resultado}");
+
+            return resultado.Content.documents.First().id;
         }
 
         private async Task<string> EmitirNota(IServicosDeNFSe servicoNFSe)
@@ -108,14 +157,19 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
             var valor = new Valor(0, 0.1, 45, 0, 0, 0.1);
 
+            var listaDeServicos = new List<Servico>();
+
             var servico = new Servico("0107", "Programação", "Programação de software", "00000",
                 "4115200", "4115200", "MARINGA", iss, retencao, valor);
+
+            listaDeServicos.Add(servico);
 
             var impressao = new Impressao(new CamposCustomizados("1", "1|2", "1|2|3"));
 
             var lista = new List<CadastrarNFSe>();
 
-            var novaNota = new CadastrarNFSe(idDeIntegracao, prestador, tomador, servico, impressao, true);
+            var novaNota = new CadastrarNFSe(idDeIntegracao, prestador, tomador, listaDeServicos,
+                impressao, true);
 
             lista.Add(novaNota);
 

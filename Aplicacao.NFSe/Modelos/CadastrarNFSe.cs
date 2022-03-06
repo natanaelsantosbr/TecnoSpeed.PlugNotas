@@ -11,11 +11,19 @@ namespace Aplicacao.NFSe.Modelos
         {
             this.prestador = new Prestador();
             this.tomador = new Tomador();
-            this.servico = new Servico();
+            this.servico = new List<Servico>();
             this.impressao = new Impressao();
         }
 
-        public CadastrarNFSe(string idIntegracao, Prestador prestador, Tomador tomador, Servico servico, Impressao impressao, bool enviarEmail) : this()
+        public CadastrarNFSe(string idIntegracao, Prestador prestador, Tomador tomador, List<Servico> servico) : this()
+        {
+            this.IdIntegracao = idIntegracao;
+            this.prestador = prestador;
+            this.tomador = tomador;
+            this.servico = servico;
+        }
+
+        public CadastrarNFSe(string idIntegracao, Prestador prestador, Tomador tomador, List<Servico> servico, Impressao impressao, bool enviarEmail) : this()
         {
             this.IdIntegracao = idIntegracao;
             this.prestador = prestador;
@@ -28,7 +36,7 @@ namespace Aplicacao.NFSe.Modelos
         public string IdIntegracao { get; set; }
         public Prestador prestador { get; set; }
         public Tomador tomador { get; set; }
-        public Servico servico { get; set; }
+        public List<Servico> servico { get; set; }
         public Impressao impressao { get; set; }
         public bool enviarEmail { get; set; }
     }

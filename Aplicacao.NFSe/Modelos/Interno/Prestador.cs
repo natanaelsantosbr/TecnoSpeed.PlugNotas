@@ -15,6 +15,10 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.endereco = new Endereco();
         }
 
+        public Prestador(string cpfCnpj)
+        {
+            this.cpfCnpj = cpfCnpj;
+        }
 
         public Prestador(string cpfCnpj,  string razaoSocial, string nomeFantasia, string inscricaoMunicipal,
             string inscricaoEstadual, bool simplesNacional, bool incentivoFiscal,
