@@ -13,11 +13,11 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.endereco = new Endereco();
         }
 
-        public Tomador(string cpfCnpj, string razaoSocial, string inscricaoMunicipal, string email, Endereco endereco) : this()
+        public Tomador(string cpfCnpj, string razaoSocial, string inscricaoEstadual,  string email, Endereco endereco) : this()
         {
             this.cpfCnpj = cpfCnpj;
             this.razaoSocial = razaoSocial;
-            this.inscricaoMunicipal = inscricaoMunicipal;   
+            this.inscricaoEstadual = inscricaoEstadual;
             this.email = email;
             this.endereco = endereco;
         }
@@ -28,7 +28,6 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.cpfCnpj = cpfCnpj;
             this.razaoSocial = razaoSocial;
             this.nomeFantasia = nomeFantasia;
-            this.inscricaoMunicipal = inscricaoMunicipal;
             this.inscricaoEstadual = inscricaoEstadual;
             this.email = email;
             this.endereco = endereco;
@@ -40,7 +39,6 @@ namespace Aplicacao.NFSe.Modelos.Interno
         public string cpfCnpj { get; set; }
         public string razaoSocial { get; set; }
         public string nomeFantasia { get; set; }
-        public string inscricaoMunicipal { get; set; }
         public string inscricaoEstadual { get; set; }
         public string email { get; set; }
     }

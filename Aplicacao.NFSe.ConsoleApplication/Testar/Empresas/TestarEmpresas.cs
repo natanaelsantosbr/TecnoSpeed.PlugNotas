@@ -1,4 +1,5 @@
-﻿using Aplicacao.NFSe.Empresas;
+﻿using Aplicacao.NFSe.Ceps;
+using Aplicacao.NFSe.Empresas;
 using Aplicacao.NFSe.Empresas.Modelos;
 using Aplicacao.NFSe.Empresas.Modelos.Interno;
 using Aplicacao.NFSe.Modelos.Interno;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
@@ -30,35 +32,38 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
             this._idCertificadoDigital = idCertificadoDigital;
 
             var servico = RestService.For<IServicosDeEmpresas>(_url);
+            var servicoDeCeps = RestService.For<IServicoDeCeps>(_url);
 
-            //var id =  await CadastrarEmpresa(servico);
+            //var id =  await CadastrarEmpresa(servico, servicoDeCeps);
 
             var cnpj = "28506113000182";
 
-            await AlterarEmpresa(servico, cnpj);
+            //await AlterarEmpresa(servico, servicoDeCeps, cnpj);
 
-            await BuscarTodosOsCDs(servico, cnpj);
-
-            await CadastrarLogotipo(servico, cnpj);
+            //await CadastrarLogotipo(servico, cnpj);
 
             await DownloadLogotipo(servico, cnpj);
 
-            await ExcluirLogotipo(servico, cnpj);
+            //await BuscarTodosOsCDs(servico, cnpj);            
 
-            await ExcluirWebhook(servico, cnpj);
+            
 
-            await CadastrarWebhook(servico, cnpj);
+            //await ExcluirLogotipo(servico, cnpj);
 
-            await AlterarWebhook(servico, cnpj);
+            //await ExcluirWebhook(servico, cnpj);
 
-            await BuscarWebhook(servico, cnpj);
+            //await CadastrarWebhook(servico, cnpj);
+
+            //await AlterarWebhook(servico, cnpj);
+
+            //await BuscarWebhook(servico, cnpj);
         }
 
-        private async Task AlterarEmpresa(IServicosDeEmpresas servico, string id)
+        private async Task AlterarEmpresa(IServicosDeEmpresas servico, IServicoDeCeps servicoDeCeps, string id)
         {
-            CadastrarEmpresa empresa = this.CriarEmpresa();
+            CadastrarEmpresa empresa = await this.CriarEmpresa(servicoDeCeps);
 
-            empresa.nomeFantasia = "Empresa MMMMM";
+            string jsonString = JsonSerializer.Serialize(empresa);
 
             var resultado = await servico.AlterarAsync(_key, id, empresa);
 
@@ -66,38 +71,42 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
                 Console.WriteLine($"{_grupo} - Alterar - {resultado.Content}");
         }
 
-        private async Task<string> CadastrarEmpresa(IServicosDeEmpresas servico)
+        private async Task<string> CadastrarEmpresa(IServicosDeEmpresas servico, IServicoDeCeps servicoDeCeps)
         {
-            CadastrarEmpresa empresa = CriarEmpresa();
+            CadastrarEmpresa empresa = await CriarEmpresa(servicoDeCeps);
 
             var resultado = await servico.CadastrarAsync(_key, empresa);
-
-            var id = resultado.Content.data.cnpj;
-
+            
             if (resultado != null)
-                Console.WriteLine($"{_grupo} - Cadastrar - {id}");
+                Console.WriteLine($"{_grupo} - Cadastrar - {empresa.cpfCnpj}");
 
-            return id;
+            return empresa.cpfCnpj;
         }
 
-        private CadastrarEmpresa CriarEmpresa()
+        private async Task<CadastrarEmpresa> CriarEmpresa(IServicoDeCeps servicoDeCeps)
         {
-            var endereco = new Endereco("BRASILIA", "70070120", TipoLogradouro.Avenida, "Q SBS QUADRA 2",
-                            TipoBairro.Setor, "5300108", "BLOCO E SALA 1504 PARTE 1", Estado.DF, "S/N", "ASA SUL");
+            var retorno = await servicoDeCeps.BuscarCepAsync(_key, "70070120");
 
-            var telefone = new Telefone("61", "992394399");
+            var buscaCep = retorno.Content;
 
-            var rps = new Aplicacao.NFSe.Empresas.Modelos.Interno.Rps("1", 1, 1);
+            var endereco = new Endereco("BRASILIA", buscaCep.cep, TipoLogradouro.Avenida, "Q SBS QUADRA 2",
+                            TipoBairro.Setor, buscaCep.ibge, "BLOCO E SALA 1504 PARTE 1",
+                            Estado.DF, "S/N", "ASA SUL");
+
+            var telefone = new Telefone("61", "981145923");
+
+            var rps = new Aplicacao.NFSe.Empresas.Modelos.Interno.Rps(1, "2", 2);
 
             var email = new Email(true);
 
-            var config = new ConfigEmpresa(TipoDeAmbiente.Homologacao, rps, email);
+            var config = new ConfigEmpresa(TipoDeAmbiente.Producao, rps, email);
 
-            var nfse = new Nfse(Ativar.Sim, 0, config);
+            var nfse = new Nfse(Ativar.Sim, TipoContrato.Bilhetagem, config);
 
-            var empresa = new CadastrarEmpresa("28506113000182", "07.824.541/001-15", "0782454100115", "DF IMOVEIS.COM S/A",
+            var empresa = new CadastrarEmpresa("28506113000182",  "0782454100115", "DF IMOVEIS.COM S/A",
                 "DFIMOVEIS.COM", _idCertificadoDigital, SimplesNacional.Nao, RegimeTributario.NormalPresumindo, IncentivoFiscal.Nao,
-                 IncentivadorCultural.Nao, RegimeTributarioEspecial.SemRegimeTributarioEspecial, endereco, telefone, "contato@dfimoveis.com.br", nfse);
+                 IncentivadorCultural.Nao, RegimeTributarioEspecial.SemRegimeTributarioEspecial,
+                 endereco, telefone, "teste@dfimoveis.com.br", nfse);
 
             return empresa;
         }
@@ -127,6 +136,12 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
         private async Task DownloadLogotipo(IServicosDeEmpresas servicoEmpresas, string cnpj)
         {
             var resultado = await servicoEmpresas.DownloadLogotipoAsync(_key, cnpj);
+
+            byte[] ByteArray = await resultado.Content.ReadAsByteArrayAsync();
+
+            System.IO.Directory.CreateDirectory("logos");
+
+            System.IO.File.WriteAllBytes($"logos/{cnpj}.jpg", ByteArray);
 
             if (resultado != null)
                 Console.WriteLine($"{_grupo} - Cadastrar logotipo por CNPJ - {resultado.Content}");

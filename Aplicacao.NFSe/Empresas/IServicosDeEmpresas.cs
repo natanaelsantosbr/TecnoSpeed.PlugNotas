@@ -3,6 +3,7 @@ using Aplicacao.NFSe.Empresas.Modelos.Retornos;
 using Refit;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace Aplicacao.NFSe.Empresas
         Task<ApiResponse<RetornoUploadDeLogotipo>> UploadLogotipoAsync([Header("x-api-key")] string apiKey, [AliasAs("arquivo")] StreamPart arquivo, string cnpj);
 
         [Get("/empresa/{cnpj}/logotipo")]
-        Task<ApiResponse<string>> DownloadLogotipoAsync([Header("x-api-key")] string apiKey, string cnpj);
+        Task<ApiResponse<HttpContent>> DownloadLogotipoAsync([Header("x-api-key")] string apiKey, string cnpj);
 
         [Delete("/empresa/{cnpj}/logotipo")]
         Task<ApiResponse<string>> ExcluirLogotipoAsync([Header("x-api-key")] string apiKey, string cnpj);

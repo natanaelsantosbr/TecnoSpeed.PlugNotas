@@ -29,7 +29,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.CertificadosDigitais
 
             var id = await Upload(_servico);
 
-            await Atualizar(_servico, id);
+            //await Atualizar(_servico, id);
 
             await BuscarPorId(_servico, id);
 
@@ -54,13 +54,13 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.CertificadosDigitais
 
         private async Task<string> Upload(IServicosDeCertificadosDigitais servico)
         {
-            var file = @"C:\cds\DATAVK_SOFTWARE_E_INTERNET_EIRELI_29637776000107_1612553363140547000.pfx";
+            var file = @"C:\cds\DFIMOVEIS.COM_1002814256.pfx";
 
             var arquivoStream = File.OpenRead(file);
 
             StreamPart sp = new StreamPart(arquivoStream, file);
 
-            var retorno = await servico.CadastrarAsync(_key, sp, "IU@mfA#!mO@");
+            var retorno = await servico.CadastrarAsync(_key, sp, "DFim@veis21");
 
             var id = retorno.Content.data.id;
 

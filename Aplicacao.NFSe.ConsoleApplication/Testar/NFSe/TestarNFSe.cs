@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,19 +36,26 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
             var cnpj = "08187168000160";
 
-            await BuscarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, cnpj);
+            //await BuscarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, cnpj);
 
-            var notaId = await EmitirNotaV2(servico);
+            //var notaId = await EmitirNotaV2(servico, servicoDeCeps);
 
-            await BuscarNota(servico, notaId);
+            //var notaId = "622768021af64e63a7c61b3b";
 
-            await DownloadPDF(servico, notaId);
+            var listaDeIds = new string[] { "62276fa1c8c19b2df79342b2" };
 
-            await DownloadXML(servico, notaId);
 
-            var cancellationProtocol = await SolicitarCancelamento(servico, notaId);
+            //await BuscarNota(servico, notaId);
 
-            await ConsultarCancelamento(servico, cancellationProtocol);
+            //await DownloadPDF(servico, notaId);
+
+            //await DownloadXML(servico, notaId);
+
+            foreach (var notaId in listaDeIds)
+            {
+                var cancellationProtocol = await SolicitarCancelamento(servico, notaId);
+                await ConsultarCancelamento(servico, cancellationProtocol);
+            }            
         }
 
         private async Task BuscarTomador(IServicosDeNFSe servico,
@@ -78,7 +86,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             var endereco = retornoCep.Content;
 
             var tomador = new CadastrarTomador(empresa.cpf_cnpj, empresa.razao_social,
-                new Endereco(endereco.bairro, endereco.cep, endereco.ibge, Estado.DF, endereco.logradouro, endereco.complemento, TipoLogradouro.Rua));
+                new Endereco(endereco.municipio, endereco.bairro, endereco.cep, endereco.ibge, Estado.DF, endereco.logradouro, endereco.complemento, TipoLogradouro.Rua));
 
             var resultado = await servico.CadastrarTomadorAsync(_key, tomador);
 
@@ -86,31 +94,35 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
                 Console.WriteLine($"{_grupo} - Cadastrar Tomador - {resultado.Content.data.cnpj}");
         }
 
-        private async Task<string> EmitirNotaV2(IServicosDeNFSe servico)
+        private async Task<string> EmitirNotaV2(IServicosDeNFSe servico, IServicoDeCeps servicoDeCeps)
         {
             var idDeIntegracao = Guid.NewGuid().ToString();
 
             string cnpjPrestador = "28506113000182";
 
-            var prestador = new Prestador(cnpjPrestador);
+            var prestador = new EnviarPrestador(cnpjPrestador);
 
             string cnpjTomador = "31089572000112";
 
-            var tomador = new Tomador(cnpjTomador, "ABDALA IMOVEIS SOLUCOES IMOBILIARIAS LTDA",
-                "0756872400107", "teste@dfimoveis.com.br",
-                new Endereco("ASA NORTE", "70.701-000", "123456", Estado.DF,
+            var retorno = await servicoDeCeps.BuscarCepAsync(_key, "70701000");
+            var buscaCep = retorno.Content;
+
+            var endereco = new Endereco(buscaCep.municipio, "ASA NORTE", buscaCep.cep, buscaCep.ibge, Estado.DF,
                 "Q SHN QUADRA 1 CONJUNTO A BL F SALAS 303 E 304 PARTE A", "S/N",
-                TipoLogradouro.Rua));
+                TipoLogradouro.Rua);
+
+            var tomador = new Tomador(cnpjTomador, "ABDALA IMOVEIS SOLUCOES IMOBILIARIAS LTDA",
+                "0787066000173", "teste@dfimoveis.com.br", endereco);
 
             var servicos = new List<Servico>();
 
             var servico1 = new Servico("17.25", "17.25", "Plano de 10 imóveis", "6319400",
                 new Iss(TipoTributacao.TributavelForaDoMunicipio, Exibilidade.Exigivel,
-                5), new Valor(2.50));
+                5), new Valor(1.50));
 
             var servico2 = new Servico("17.25", "17.25", "Destaque", "6319400",
                 new Iss(TipoTributacao.TributavelForaDoMunicipio, Exibilidade.Exigivel,
-                5), new Valor(3.75));
+                5), new Valor(1.75));
 
             servicos.Add(servico1);
             servicos.Add(servico2);
@@ -120,6 +132,9 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             var cadastrarNFSE = new CadastrarNFSe(idDeIntegracao, prestador, tomador, servicos);
 
             lista.Add(cadastrarNFSE);
+
+
+            string jsonString = JsonSerializer.Serialize(lista);
 
             var resultado = await servico.CadastrarAsync(_key, lista);
 
@@ -155,7 +170,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             var csll = new Csll(0);
             var retencao = new Retencao(pis, cofins, csll);
 
-            var valor = new Valor(0, 0.1, 45, 0, 0, 0.1);
+            var valor = new Valor(1);
 
             var listaDeServicos = new List<Servico>();
 
@@ -168,7 +183,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
             var lista = new List<CadastrarNFSe>();
 
-            var novaNota = new CadastrarNFSe(idDeIntegracao, prestador, tomador, listaDeServicos,
+            var novaNota = new CadastrarNFSe(idDeIntegracao, null, tomador, listaDeServicos,
                 impressao, true);
 
             lista.Add(novaNota);
@@ -215,8 +230,6 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
         private async Task<string> SolicitarCancelamento(IServicosDeNFSe servicoNFSe, string notaId)
         {
-            Thread.Sleep(5000);
-
             var tipoDeCancelamento = new TipoDeCancelamento("C099", "É necessário o body ao cancelar uma NFSe, para incluir o código de cancelamento da cidade.");
 
             var resultado = await servicoNFSe.SolicitarCancelamentoAsync(_key, notaId, tipoDeCancelamento);

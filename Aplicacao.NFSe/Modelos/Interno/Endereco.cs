@@ -11,9 +11,10 @@ namespace Aplicacao.NFSe.Modelos.Interno
 
         }
 
-        public Endereco(string bairro, string cep, string codigoCidade, Estado estado, 
+        public Endereco(string descricaoCidade, string bairro, string cep, string codigoCidade, Estado estado, 
             string logradouro, string numero, TipoLogradouro tipoLogradouro): this()
         {
+            this.descricaoCidade = descricaoCidade;
             this.bairro = bairro;
             this.cep = cep;
             this.codigoCidade = codigoCidade;

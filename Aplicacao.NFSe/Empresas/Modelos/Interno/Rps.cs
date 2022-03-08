@@ -11,11 +11,11 @@ namespace Aplicacao.NFSe.Empresas.Modelos.Interno
 
         }
 
-        public Rps(string serie, int numero, int lote)
+        public Rps(int lote, string serie, int numero)
         {
+            this.lote = lote;
             this.serie = serie;
             this.numero = numero;
-            this.lote = lote;
         }
 
         public string serie { get; set; }

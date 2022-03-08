@@ -13,26 +13,23 @@ namespace Aplicacao.NFSe.Empresas.Modelos
             this.endereco = new Endereco();
             this.telefone = new Telefone();
             this.nfse = new Nfse();
-            this.nfe = new Nfe();
         }
 
-        public CadastrarEmpresa(string cpfCnpj, string inscricaoMunicipal, string inscricaoEstadual, string razaoSocial, string nomeFantasia,
+        public CadastrarEmpresa(string cpfCnpj, string inscricaoEstadual,
+            string razaoSocial, string nomeFantasia,
             string certificado, SimplesNacional simplesNacional, RegimeTributario regimeTributario, IncentivoFiscal incentivoFiscal,
             IncentivadorCultural incentivadorCultural,
-            RegimeTributarioEspecial regimeTributarioEspecial, Endereco endereco, Telefone telefone, string email, Nfse nfse) : this()
+            RegimeTributarioEspecial regimeTributarioEspecial, Endereco endereco, 
+            Telefone telefone, string email, Nfse nfse) : this()
         {
             if (string.IsNullOrEmpty(cpfCnpj))
                 throw new Exception("CNPJ obrigatório");
-
-            if (string.IsNullOrEmpty(inscricaoMunicipal))
-                throw new Exception("Inscricação Municipal obrigatório");
 
             if (string.IsNullOrEmpty(inscricaoEstadual))
                 throw new Exception("Inscricação Estadual obrigatório");
 
 
             this.cpfCnpj = cpfCnpj;
-            this.inscricaoMunicipal = inscricaoMunicipal;
             this.inscricaoEstadual = inscricaoEstadual;
             this.razaoSocial = razaoSocial;
             this.nomeFantasia = nomeFantasia;
@@ -49,8 +46,7 @@ namespace Aplicacao.NFSe.Empresas.Modelos
             this.nfse = nfse;
         }
 
-        public string cpfCnpj { get; set; }
-        public string inscricaoMunicipal { get; set; }
+        public string cpfCnpj { get; set; }        
         public string inscricaoEstadual { get; set; }
         public string razaoSocial { get; set; }
         public string nomeFantasia { get; set; }
@@ -64,6 +60,5 @@ namespace Aplicacao.NFSe.Empresas.Modelos
         public Endereco endereco { get; set; }
         public Telefone telefone { get; set; }
         public Nfse nfse { get; set; }
-        public Nfe nfe { get; set; }        
     }
 }
