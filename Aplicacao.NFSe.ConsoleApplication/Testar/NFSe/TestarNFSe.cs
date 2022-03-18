@@ -34,28 +34,35 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             var servicoDeBuscaEmpresa = RestService.For<IServicosDeCNPJs>(_url);
             var servicoDeCeps = RestService.For<IServicoDeCeps>(_url);
 
-            var cnpj = "08187168000160";
+            var cnpj = "28506113000182";
 
             //await BuscarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, cnpj);
 
             //var notaId = await EmitirNotaV2(servico, servicoDeCeps);
 
-            //var notaId = "622768021af64e63a7c61b3b";
+            var notaId = "6234bd69dd6d66577bb9dc47";
 
-            var listaDeIds = new string[] { "62276fa1c8c19b2df79342b2" };
+            //var listaDeIds = new string[] { "62276fa1c8c19b2df79342b2" };
 
+            var tomador = "31089572000112";
 
-            //await BuscarNota(servico, notaId);
+            var idDeIntegracao = "38c65904-a370-4f48-8b9e-61e8374a0132";
 
-            //await DownloadPDF(servico, notaId);
+            //await BuscarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, tomador);
 
-            //await DownloadXML(servico, notaId);
+            await BuscaResumoDaNota(servico, idDeIntegracao, cnpj);
 
-            foreach (var notaId in listaDeIds)
-            {
-                var cancellationProtocol = await SolicitarCancelamento(servico, notaId);
-                await ConsultarCancelamento(servico, cancellationProtocol);
-            }            
+            await BuscarNota(servico, notaId);
+
+            await DownloadPDF(servico, notaId);
+
+            await DownloadXML(servico, notaId);
+
+            //foreach (var notaId in listaDeIds)
+            //{
+            //    var cancellationProtocol = await SolicitarCancelamento(servico, notaId);
+            //    await ConsultarCancelamento(servico, cancellationProtocol);
+            //}            
         }
 
         private async Task BuscarTomador(IServicosDeNFSe servico,
@@ -86,7 +93,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             var endereco = retornoCep.Content;
 
             var tomador = new CadastrarTomador(empresa.cpf_cnpj, empresa.razao_social,
-                new Endereco(endereco.municipio, endereco.bairro, endereco.cep, endereco.ibge, Estado.DF, endereco.logradouro, endereco.complemento, TipoLogradouro.Rua));
+                new Endereco(endereco.municipio, endereco.bairro, endereco.cep, endereco.ibge, Estado.DF, endereco.logradouro, "S/N", TipoLogradouro.Rua));
 
             var resultado = await servico.CadastrarTomadorAsync(_key, tomador);
 
@@ -111,18 +118,19 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
                 "Q SHN QUADRA 1 CONJUNTO A BL F SALAS 303 E 304 PARTE A", "S/N",
                 TipoLogradouro.Rua);
 
-            var tomador = new Tomador(cnpjTomador, "ABDALA IMOVEIS SOLUCOES IMOBILIARIAS LTDA",
+            var tomador = new Tomador(cnpjTomador, "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL",
                 "0787066000173", "teste@dfimoveis.com.br", endereco);
 
             var servicos = new List<Servico>();
 
-            var servico1 = new Servico("17.25", "17.25", "Plano de 10 imóveis", "6319400",
-                new Iss(TipoTributacao.TributavelForaDoMunicipio, Exibilidade.Exigivel,
-                5), new Valor(1.50));
+            var iss = new Iss(TipoTributacao.TributavelForaDoMunicipio, Exibilidade.Exigivel, 5);
+            var pis = new Pis(0.65);
+            var cofins = new Cofins(3);
 
-            var servico2 = new Servico("17.25", "17.25", "Destaque", "6319400",
-                new Iss(TipoTributacao.TributavelForaDoMunicipio, Exibilidade.Exigivel,
-                5), new Valor(1.75));
+            var retencao = new Retencao(pis, cofins);
+
+            var servico1 = new Servico("17.25", "17.25", "Plano de 10 imóveis", "6319400", iss, retencao, new Valor(1.50));
+            var servico2 = new Servico("17.25", "17.25", "Destaque", "6319400", iss, retencao, new Valor(1.75));
 
             servicos.Add(servico1);
             servicos.Add(servico2);
@@ -198,6 +206,17 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
             return retorno;
         }
 
+        private async Task BuscaResumoDaNota(IServicosDeNFSe servicoNFSe, string idIntegracao, string cnpj)
+        {
+            var resultado = await servicoNFSe.ConsultarResumoDaNota(_key, idIntegracao, cnpj);
+
+            foreach (var item in resultado.Content)
+            {
+                Console.WriteLine($"consultar nota: {item.mensagem} ");
+            }
+
+        }
+
         private async Task BuscarNota(IServicosDeNFSe servicoNFSe, string notaId)
         {
             var resultado = await servicoNFSe.BuscarNotaAsync(_key, notaId);
@@ -223,6 +242,12 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
         private async Task DownloadXML(IServicosDeNFSe servicoNFSe, string notaId)
         {
             var resultado = await servicoNFSe.DownloadXMLAsync(_key, notaId);
+
+            byte[] ByteArray = await resultado.Content.ReadAsByteArrayAsync();
+
+            System.IO.Directory.CreateDirectory("xml");
+
+            System.IO.File.WriteAllBytes($"xml/{notaId}.xml", ByteArray);
 
             if (resultado != null)
                 Console.WriteLine($"{_grupo} - Download XML - {notaId}");

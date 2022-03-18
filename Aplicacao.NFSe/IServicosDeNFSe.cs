@@ -30,7 +30,7 @@ namespace Aplicacao.NFSe
         Task<ApiResponse<HttpContent>> DownloadPDFAsync([Header("x-api-key")] string apiKey, string idNota);
 
         [Get("/nfse/xml/{idNota}")]
-        Task<ApiResponse<string>> DownloadXMLAsync([Header("x-api-key")] string apiKey, string idNota);
+        Task<ApiResponse<HttpContent>> DownloadXMLAsync([Header("x-api-key")] string apiKey, string idNota);
 
         [Post("/nfse/tomador")]
         Task<ApiResponse<RetornoDeCadastroDeTomador>> CadastrarTomadorAsync([Header("x-api-key")] string apiKey, CadastrarTomador modelo);
@@ -43,6 +43,9 @@ namespace Aplicacao.NFSe
 
         [Get("/nfse/cidades")]
         Task<ApiResponse<CidadeIBGE>> ConsultarCidadesAsync([Header("x-api-key")] string apiKey);
+
+        [Get("/nfse/consultar/{idIntegracao}/{cnpj}")]
+        Task<ApiResponse<List<BuscarResumoNFSe>>> ConsultarResumoDaNota([Header("x-api-key")] string apiKey, string idIntegracao, string cnpj);
 
 
     }

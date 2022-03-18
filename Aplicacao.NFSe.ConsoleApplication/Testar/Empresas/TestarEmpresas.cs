@@ -42,9 +42,9 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
             //await CadastrarLogotipo(servico, cnpj);
 
-            await DownloadLogotipo(servico, cnpj);
+            //await DownloadLogotipo(servico, cnpj);
 
-            //await BuscarTodosOsCDs(servico, cnpj);            
+            await BuscarTodosOsCDs(servico, cnpj);            
 
             
 

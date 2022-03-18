@@ -15,7 +15,7 @@ namespace Aplicacao.NFSe.Modelos.Interno
         }
 
         public Servico(string codigo, string codigoTributacao, string discriminacao,
-            string cnae, Iss iss, Valor valor) : this()
+            string cnae, Iss iss,  Retencao retencao, Valor valor) : this()
         {
             this.codigo = codigo;
             this.codigoTributacao = codigoTributacao;
@@ -23,6 +23,7 @@ namespace Aplicacao.NFSe.Modelos.Interno
             this.cnae = cnae;
             this.iss = iss;
             this.valor = valor;
+            this.retencao = retencao;
         }
 
         public Servico(string codigo, string descricaoLC116, string discriminacao, string cnae,
