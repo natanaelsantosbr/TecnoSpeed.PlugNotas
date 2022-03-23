@@ -3,6 +3,8 @@ using Aplicacao.NFSe.Empresas;
 using Aplicacao.NFSe.Empresas.Modelos;
 using Aplicacao.NFSe.Empresas.Modelos.Interno;
 using Aplicacao.NFSe.Modelos.Interno;
+using Aplicacao.NFSe.Webhooks;
+using Aplicacao.NFSe.Webhooks.Modelos;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 {
     public class TestarEmpresas : ITestarEmpresas
     {
+        private const string UrlPadrao = "https://adm.dfimoveis.com.br/plugnotas";
         private string _url;
         private string _key;
         private string _grupo;
@@ -33,6 +36,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
             var servico = RestService.For<IServicosDeEmpresas>(_url);
             var servicoDeCeps = RestService.For<IServicoDeCeps>(_url);
+            var servicoDeWebhook = RestService.For<IServicosDeWebhooks>(_url);
 
             //var id =  await CadastrarEmpresa(servico, servicoDeCeps);
 
@@ -44,19 +48,28 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
             //await DownloadLogotipo(servico, cnpj);
 
-            await BuscarTodosOsCDs(servico, cnpj);            
-
-            
+            //await BuscarTodosOsCDs(servico, cnpj);            
 
             //await ExcluirLogotipo(servico, cnpj);
 
-            //await ExcluirWebhook(servico, cnpj);
-
-            //await CadastrarWebhook(servico, cnpj);
-
-            //await AlterarWebhook(servico, cnpj);
+            await TestarWebHooks(servicoDeWebhook, cnpj);
 
             //await BuscarWebhook(servico, cnpj);
+        }
+
+        private async Task TestarWebHooks(IServicosDeWebhooks servicoDeWebhook, string cnpj)
+        {
+            //await CadastrarWebhook(servicoDeWebhook);
+
+            await ConsultarWebhook(servicoDeWebhook);            
+
+            await AlterarWebhook(servicoDeWebhook);
+
+            await TestarWebhook(servicoDeWebhook);
+
+            //await ExcluirWebhook(servicoDeWebhook);           
+
+            
         }
 
         private async Task AlterarEmpresa(IServicosDeEmpresas servico, IServicoDeCeps servicoDeCeps, string id)
@@ -155,41 +168,55 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
                 Console.WriteLine($"{_grupo} - Cadastrar logotipo por CNPJ - {resultado.Content}");
         }
 
-        private async Task CadastrarWebhook(IServicosDeEmpresas servicoEmpresas, string cnpj)
+        private async Task CadastrarWebhook(IServicosDeWebhooks servicosDeWebhooks)
         {
-            string url = "https://api.adm.dfimoveis.com.br/plugnotas";
+            string url = UrlPadrao;
 
-            var queryString = new QueryString("cnpj", cnpj);
-
-            var resultado = await servicoEmpresas.CadastrarWebhookAsync(_key, cnpj, new CadastrarWebhook(url, Method.Post, queryString));
+            var resultado = await servicosDeWebhooks.CadastrarAsync(_key, new CadastrarWebhook(url, Method.Post));
 
             if (resultado != null)
                 Console.WriteLine($"{_grupo} - Cadastrar Webhook por CNPJ - {resultado.Content.message}");
         }
 
-        private async Task AlterarWebhook(IServicosDeEmpresas servicoEmpresas, string cnpj)
+        private async Task AlterarWebhook(IServicosDeWebhooks servicosDeWebhooks)
         {
-            string url = "https://api.adm.dfimoveis.com.br/plugnotas";
+            string url = UrlPadrao;
 
-            var queryString = new QueryString("cnpj", cnpj);
-
-            var resultado = await servicoEmpresas.AlterarWebhookAsync(_key, cnpj, new AlterarWebhook(url, Method.Post, queryString));
+            var resultado = await servicosDeWebhooks.AlterarSync(_key, new AlterarWebhook(url, Method.Post));
 
             if (resultado != null)
                 Console.WriteLine($"{_grupo} - Alterar Webhook por CNPJ - {resultado.Content.message}");
         }
 
-        private async Task ExcluirWebhook(IServicosDeEmpresas servicoEmpresas, string cnpj)
+        private async Task ConsultarWebhook(IServicosDeWebhooks servicosDeWebhooks)
         {
-            var resultado = await servicoEmpresas.ExcluirWebhookAsync(_key, cnpj);
+            var resultado = await servicosDeWebhooks.ConsultarSync(_key);
+
+            if (resultado != null)
+                Console.WriteLine($"{_grupo} - Testar Webhook por CNPJ - {resultado.Content}");
+        }
+
+        private async Task TestarWebhook(IServicosDeWebhooks servicosDeWebhooks)
+        {
+            var resultado = await servicosDeWebhooks.TestarSync(_key);
+
+            if (resultado != null)
+                Console.WriteLine($"{_grupo} - Testar Webhook por CNPJ - {resultado}");
+        }
+
+        
+
+        private async Task ExcluirWebhook(IServicosDeWebhooks servicosDeWebhooks)
+        {
+            var resultado = await servicosDeWebhooks.ExcluirSync(_key);
 
             if (resultado != null)
                 Console.WriteLine($"{_grupo} - Excluir Webhook por CNPJ - {resultado.Content}");
         }
 
-        private async Task BuscarWebhook(IServicosDeEmpresas servicoEmpresas, string cnpj)
+        private async Task BuscarWebhook(IServicosDeWebhooks servicosDeWebhooks)
         {
-            var resultado = await servicoEmpresas.BuscarWebhookAsync(_key, cnpj);
+            var resultado = await servicosDeWebhooks.ConsultarSync(_key);
 
             if (resultado != null)
                 Console.WriteLine($"{_grupo} - Buscar Webhook por CNPJ - {resultado.Content}");

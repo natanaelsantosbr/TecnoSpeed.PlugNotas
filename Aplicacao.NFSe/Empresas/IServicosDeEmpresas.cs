@@ -32,17 +32,5 @@ namespace Aplicacao.NFSe.Empresas
 
         [Delete("/empresa/{cnpj}/logotipo")]
         Task<ApiResponse<string>> ExcluirLogotipoAsync([Header("x-api-key")] string apiKey, string cnpj);
-
-        [Post("/empresa/{cnpj}/webhook")]
-        Task<ApiResponse<RetornoCadastroDeWebhook>> CadastrarWebhookAsync([Header("x-api-key")] string apiKey, string cnpj, CadastrarWebhook modelo);
-
-        [Put("/empresa/{cnpj}/webhook")]
-        Task<ApiResponse<RetornoCadastroDeWebhook>> AlterarWebhookAsync([Header("x-api-key")] string apiKey, string cnpj, AlterarWebhook modelo);
-
-        [Delete("/empresa/{cnpj}/webhook")]
-        Task<ApiResponse<string>> ExcluirWebhookAsync([Header("x-api-key")] string apiKey, string cnpj);
-
-        [Get("/empresa/{cnpj}/webhook")]
-        Task<ApiResponse<string>> BuscarWebhookAsync(string key, string cnpj);
     }
 }

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Aplicacao.NFSe.Empresas.Modelos
+namespace Aplicacao.NFSe.Webhooks.Modelos
 {
     public class AlterarWebhook
     {
@@ -12,17 +12,16 @@ namespace Aplicacao.NFSe.Empresas.Modelos
 
         }
 
-        public AlterarWebhook(string urlBase, Method method, QueryString queryString) : this()
+        public AlterarWebhook(string url, Method method) : this()
         {
-            this.url = urlBase; 
+            this.url = url;
             this.method = method.ToString();
-            this.queryString = queryString;
         }
+
 
         public string url { get; set; }
 
         public string method { get; set; }
 
-        public QueryString queryString { get; set; }
     }
 }

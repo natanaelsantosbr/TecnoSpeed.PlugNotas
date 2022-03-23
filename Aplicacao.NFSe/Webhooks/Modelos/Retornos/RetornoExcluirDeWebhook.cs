@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Aplicacao.NFSe.Empresas.Modelos.Retornos
+namespace Aplicacao.NFSe.Webhooks.Modelos.Retornos
 {
-    public class RetornoCadastroDeWebhook
+    public struct RetornoExcluirDeWebhook
     {
         public string message { get; set; }
     }

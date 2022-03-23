@@ -20,6 +20,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
         private string _url;
         private string _key;
         private string _grupo;
+        private string _idDeIntegracao;
 
         public TestarNFSe(string urlPadrao, string key, string grupo)
         {
@@ -38,15 +39,15 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
 
             //await BuscarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, cnpj);
 
-            //var notaId = await EmitirNotaV2(servico, servicoDeCeps);
+            var notaId = await EmitirNotaV2(servico, servicoDeCeps);
 
-            var notaId = "6234bd69dd6d66577bb9dc47";
+            //var notaId = "6234bd69dd6d66577bb9dc47";
 
             //var listaDeIds = new string[] { "62276fa1c8c19b2df79342b2" };
 
             var tomador = "31089572000112";
 
-            var idDeIntegracao = "38c65904-a370-4f48-8b9e-61e8374a0132";
+            var idDeIntegracao = this._idDeIntegracao; // "38c65904-a370-4f48-8b9e-61e8374a0132";
 
             //await BuscarTomador(servico, servicoDeBuscaEmpresa, servicoDeCeps, tomador);
 
@@ -104,6 +105,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
         private async Task<string> EmitirNotaV2(IServicosDeNFSe servico, IServicoDeCeps servicoDeCeps)
         {
             var idDeIntegracao = Guid.NewGuid().ToString();
+            this._idDeIntegracao = idDeIntegracao;
 
             string cnpjPrestador = "28506113000182";
 
