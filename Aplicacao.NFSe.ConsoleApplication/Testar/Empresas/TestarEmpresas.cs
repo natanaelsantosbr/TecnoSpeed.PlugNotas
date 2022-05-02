@@ -40,11 +40,11 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
             //var id =  await CadastrarEmpresa(servico, servicoDeCeps);
 
-            var cnpj = "28506113000182";
+            var cnpj = "44464427000116";
 
             //await AlterarEmpresa(servico, servicoDeCeps, cnpj);
 
-            //await CadastrarLogotipo(servico, cnpj);
+            await CadastrarLogotipo(servico, cnpj);
 
             //await DownloadLogotipo(servico, cnpj);
 
@@ -52,7 +52,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
             //await ExcluirLogotipo(servico, cnpj);
 
-            await TestarWebHooks(servicoDeWebhook, cnpj);
+            //await TestarWebHooks(servicoDeWebhook, cnpj);
 
             //await BuscarWebhook(servico, cnpj);
         }
@@ -116,7 +116,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
             var nfse = new Nfse(Ativar.Sim, TipoContrato.Bilhetagem, config);
 
-            var empresa = new CadastrarEmpresa("28506113000182",  "0782454100115", "DF IMOVEIS.COM S/A",
+            var empresa = new CadastrarEmpresa("28506113000182", "0782454100115", "DF IMOVEIS.COM S/A",
                 "DFIMOVEIS.COM", _idCertificadoDigital, SimplesNacional.Nao, RegimeTributario.NormalPresumindo, IncentivoFiscal.Nao,
                  IncentivadorCultural.Nao, RegimeTributarioEspecial.SemRegimeTributarioEspecial,
                  endereco, telefone, "teste@dfimoveis.com.br", nfse);
@@ -134,7 +134,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.Empresas
 
         private async Task CadastrarLogotipo(IServicosDeEmpresas servicoEmpresas, string cnpj)
         {
-            var file = @"C:\cds\img\dfimoveis.jpg";
+            var file = @"C:\cds\img\62imoveis.jpg";
 
             var arquivoStream = File.OpenRead(file);
 

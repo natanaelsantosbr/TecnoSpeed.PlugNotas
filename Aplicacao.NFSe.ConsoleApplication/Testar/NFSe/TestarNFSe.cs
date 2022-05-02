@@ -121,7 +121,7 @@ namespace Aplicacao.NFSe.ConsoleApplication.Testar.NFSe
                 TipoLogradouro.Rua);
 
             var tomador = new Tomador(cnpjTomador, "NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL",
-                "0787066000173", "teste@dfimoveis.com.br", endereco);
+                "0787066000172", "teste@dfimoveis.com.br", endereco);
 
             var servicos = new List<Servico>();
 

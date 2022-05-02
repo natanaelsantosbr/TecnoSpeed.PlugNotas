@@ -19,12 +19,12 @@ namespace Aplicacao.NFSe.ConsoleApplication
 
             //QuebraLinha();
 
-            //var testarEmpresas = new TestarEmpresas(_url, _key, "empresa");
-            //await testarEmpresas.Inicializar(idCertificado);
+            var testarEmpresas = new TestarEmpresas(_url, _key, "empresa");
+            await testarEmpresas.Inicializar(idCertificado);
             //QuebraLinha();
 
-            var testarNFSe = new TestarNFSe(_url, _key, "nfse");
-            await testarNFSe.Inicializar();
+            //var testarNFSe = new TestarNFSe(_url, _key, "nfse");
+            //await testarNFSe.Inicializar();
         }
 
         private static void QuebraLinha()
